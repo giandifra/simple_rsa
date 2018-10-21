@@ -1,6 +1,6 @@
 # Simple RSA Encryption
 
-Flutter Plugin to encrypt and decrypt string with a public and a private key
+Flutter plugin to encrypt and decrypt (RSA/ECB/PCSK1) string with a public and a private key 
 
 Support only ANDROID (for now)
 
