@@ -13,8 +13,10 @@ To use the plugin, add `simple_rsa` as a
 
 First, add private and public key
 
-```final PUBLIC_KEY = "...";
-final PRIVATE_KEY = "...";```
+```
+final PUBLIC_KEY = "...";
+final PRIVATE_KEY = "...";
+```
 
 After, you can encrypt text
 
