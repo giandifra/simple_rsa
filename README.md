@@ -14,9 +14,8 @@ To use the plugin, add `simple_rsa` as a
 First, add private and public key
 
 ```final PUBLIC_KEY = "...";
+final PRIVATE_KEY = "...";```
 
-  final PRIVATE_KEY = "...";
-```
 After, you can encrypt text
 
 ```final String textEncrypted = await encryptString(text, PUBLIC_KEY);```
@@ -27,5 +26,5 @@ and decrypt
 
 ## Example
 
-See the [example application]() source
+See the [example application](https://github.com/giandifra/simple_rsa/tree/master/example) source
 for a complete sample app using the Simple RSA encryption.# simple_rsa
