@@ -27,4 +27,4 @@ and decrypt
 ## Example
 
 See the [example application](https://github.com/giandifra/simple_rsa/tree/master/example) source
-for a complete sample app using the Simple RSA encryption.# simple_rsa
+for a complete sample app using the Simple RSA encryption.
