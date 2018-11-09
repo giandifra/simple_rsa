@@ -24,3 +24,23 @@ Future<String> decryptString(String txt, String privateKey) async {
     throw "Failed decoded string: '${e.message}'.";
   }
 }
+
+Future<String> signString(String plainText, String privateKey) async {
+  try {
+    final String result = await _channel
+        .invokeMethod('sign', {"plainText": plainText, "privateKey": privateKey});
+    return result;
+  } on PlatformException catch (e) {
+    throw "Failed decoded string: '${e.message}'.";
+  }
+}
+
+Future<String> verifyString(String plainText, String signature, String publicKey) async {
+  try {
+    final String result = await _channel
+        .invokeMethod('verify', {"plainText": plainText, "signature": signature, "publicKey": publicKey});
+    return result;
+  } on PlatformException catch (e) {
+    throw "Failed decoded string: '${e.message}'.";
+  }
+}

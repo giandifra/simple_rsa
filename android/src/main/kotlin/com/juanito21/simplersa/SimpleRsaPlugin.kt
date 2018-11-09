@@ -65,6 +65,37 @@ class SimpleRsaPlugin() : MethodCallHandler {
                     result.error("NULL INPUT STRING", "Decrypt failure.", null)
                 }
             }
+            "sign" -> {
+                val text = call.argument<String>("plainText")
+                val privateKey = call.argument<String>("privateKey")
+                if (text != null && privateKey != null) {
+                    try {
+                        val output = signData(text, privateKey)
+                        result.success(output)
+                    } catch (e: java.lang.Exception) {
+                        e.printStackTrace()
+                        result.error("UNAVAILABLE", "Sign failure.", null)
+                    }
+                } else {
+                    result.error("NULL INPUT STRING", "Sign failure.", null)
+                }
+            }
+            "verify" -> {
+                val text = call.argument<String>("plainText")
+                val sign = call.argument<String>("signature")
+                val publicKey = call.argument<String>("publicKey")
+                if (text != null && sign != null && publicKey != null) {
+                    try {
+                        val output = verifyData(text, sign, publicKey)
+                        result.success(output)
+                    } catch (e: java.lang.Exception) {
+                        e.printStackTrace()
+                        result.error("UNAVAILABLE", "Verify failure.", null)
+                    }
+                } else {
+                    result.error("NULL INPUT STRING", "Verify failure.", null)
+                }
+            }
             else -> result.notImplemented()
         }
     }
@@ -103,6 +134,36 @@ class SimpleRsaPlugin() : MethodCallHandler {
         cipher1.init(Cipher.DECRYPT_MODE, loadPrivateKey(privateKey))
         val decryptedBytes = cipher1.doFinal(encryptedBytes)
         return String(decryptedBytes)
+    }
+
+    @Throws(NoSuchAlgorithmException::class, NoSuchPaddingException::class, InvalidKeyException::class, IllegalBlockSizeException::class, BadPaddingException::class)
+    private fun signData(plainText: String, privateKey: String): String {
+        try {
+            val privateSignature = Signature.getInstance("SHA1withRSA")
+            privateSignature.initSign(loadPrivateKey(privateKey))
+            privateSignature.update(plainText.toByteArray())
+            val signature = privateSignature.sign()
+            return Base64.encodeToString(signature, Base64.DEFAULT)
+        } catch (e: Exception) {
+            throw Exception(e.toString())
+        }
+    }
+
+    private fun verifyData(plainText: String, signature: String, publicKey: String): Boolean {
+        try {
+            val publicBytes = Base64.decode(publicKey, Base64.DEFAULT)
+            val keySpec = X509EncodedKeySpec(publicBytes)
+            val keyFactory = KeyFactory.getInstance("RSA")
+            val pubKey = keyFactory.generatePublic(keySpec)
+
+            val publicSignature = Signature.getInstance("SHA1withRSA")
+            publicSignature.initVerify(pubKey)
+            publicSignature.update(plainText.toByteArray())
+            val signatureBytes = Base64.decode(signature, Base64.DEFAULT)
+            return publicSignature.verify(signatureBytes)
+        } catch (e: Exception) {
+            throw Exception(e.toString())
+        }
     }
 
 }
