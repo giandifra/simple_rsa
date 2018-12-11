@@ -32,4 +32,4 @@ See the [example application](https://github.com/giandifra/simple_rsa/tree/maste
 for a complete sample app using the Simple RSA encryption.
 
 ### Contributions
-[Adlan Arif Zakaria (adlanarifzr)](https://github.com/adlanarifzr) the image properties feature.
+[Adlan Arif Zakaria (adlanarifzr)](https://github.com/adlanarifzr) iOS compatibility, sign and verify method.
