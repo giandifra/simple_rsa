@@ -1,6 +1,6 @@
 name: simple_rsa
 description: Flutter plugin to encrypt and decrypt string with a public and a private key
-version: 0.0.1
+version: 0.0.2
 author: Gian Marco Di Francesco <difrancescogianmarco@gmail.com>
 homepage: https://github.com/giandifra/simple_rsa
 

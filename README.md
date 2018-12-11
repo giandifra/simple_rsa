@@ -1,8 +1,8 @@
 # Simple RSA Encryption
 
-Flutter plugin to encrypt and decrypt (RSA/ECB/PCSK1) string with a public and a private key 
+Flutter plugin to encrypt, decrypt (RSA/ECB/PCSK1), verify and sign string with a public and a private key
 
-Support only ANDROID (for now)
+Support for ANDROID and iOS(thanks to adlanarifzr)
 
 ## Installation
 
@@ -30,3 +30,6 @@ and decrypt
 
 See the [example application](https://github.com/giandifra/simple_rsa/tree/master/example) source
 for a complete sample app using the Simple RSA encryption.
+
+### Contributions
+[Adlan Arif Zakaria (adlanarifzr)](https://github.com/adlanarifzr) the image properties feature.
