@@ -1,6 +1,7 @@
 package com.juanito21.simplersa
 
 import android.util.Base64
+import android.util.Log
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
@@ -14,6 +15,8 @@ import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
 import javax.crypto.IllegalBlockSizeException
 import javax.crypto.NoSuchPaddingException
+
+
 
 
 class SimpleRsaPlugin() : MethodCallHandler {
@@ -46,8 +49,9 @@ class SimpleRsaPlugin() : MethodCallHandler {
                         e.printStackTrace()
                         result.error("UNAVAILABLE", "Encrypt failure.", null)
                     }
+                }else{
+                    result.error("NULL INPUT STRING", "Encrypt failure.", null)
                 }
-                result.error("NULL INPUT STRING", "Encrypt failure.", null)
             }
             "decrypt" -> {
                 val text = call.argument<String>("txt")
@@ -96,6 +100,22 @@ class SimpleRsaPlugin() : MethodCallHandler {
                     result.error("NULL INPUT STRING", "Verify failure.", null)
                 }
             }
+            "decryptWithPublicKey" -> {
+                val text = call.argument<String>("plainText")
+                val publicKey = call.argument<String>("publicKey")
+                if (text != null && publicKey != null) {
+                    try {
+                        val d = Base64.decode(text, Base64.DEFAULT)
+                        val output = decryptStringWithPublicKey(d, publicKey)
+                        result.success(output)
+                    } catch (e: java.lang.Exception) {
+                        e.printStackTrace()
+                        result.error("UNAVAILABLE", "Decrypt failure.", null)
+                    }
+                } else {
+                    result.error("NULL INPUT STRING", "Decrypt failure.", null)
+                }
+            }
             else -> result.notImplemented()
         }
     }
@@ -137,6 +157,35 @@ class SimpleRsaPlugin() : MethodCallHandler {
     }
 
     @Throws(NoSuchAlgorithmException::class, NoSuchPaddingException::class, InvalidKeyException::class, IllegalBlockSizeException::class, BadPaddingException::class)
+    private fun decryptStringWithPublicKey(encryptedBytes: ByteArray, publicKey: String): String {
+        val publicBytes = Base64.decode(publicKey, Base64.DEFAULT)
+        val keySpec = X509EncodedKeySpec(publicBytes)
+        val keyFactory = KeyFactory.getInstance("RSA")
+        val pubKey = keyFactory.generatePublic(keySpec)
+        val cipher1 = Cipher.getInstance("RSA/ECB/PKCS1PADDING")
+        cipher1.init(Cipher.DECRYPT_MODE, pubKey)
+
+        val blockSize = cipher1.blockSize
+        val blocks : Int = Math.ceil(encryptedBytes.size / blockSize.toDouble()).toInt()
+        var output = ByteArray(blocks * blockSize)
+        var outputSize = 0
+
+        for (i in 0 until blocks) {
+            val offset = i * blockSize
+            val blockLength = Math.min(blockSize, encryptedBytes.size - offset)
+            val cryptoBlock = cipher1.doFinal(encryptedBytes, offset, blockLength)
+            System.arraycopy(cryptoBlock, 0, output, outputSize, cryptoBlock.size)
+            outputSize += cryptoBlock.size
+        }
+
+        if (outputSize != output.size) {
+            val tmp = output.copyOfRange(0, outputSize)
+            output = tmp
+        }
+        return String(output)
+    }
+
+    @Throws(NoSuchAlgorithmException::class, NoSuchPaddingException::class, InvalidKeyException::class, IllegalBlockSizeException::class, BadPaddingException::class)
     private fun signData(plainText: String, privateKey: String): String {
         try {
             val privateSignature = Signature.getInstance("SHA1withRSA")
@@ -165,5 +214,4 @@ class SimpleRsaPlugin() : MethodCallHandler {
             throw Exception(e.toString())
         }
     }
-
 }

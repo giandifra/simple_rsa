@@ -44,3 +44,13 @@ Future<String> verifyString(String plainText, String signature, String publicKey
     throw "Failed decoded string: '${e.message}'.";
   }
 }
+
+Future<String> decryptStringWithPublicKey(String plainText, String signature, String publicKey) async {
+  try {
+    final String result = await _channel
+        .invokeMethod('decryptWithPublicKey', {"plainText": plainText, "publicKey": publicKey});
+    return result;
+  } on PlatformException catch (e) {
+    throw "Failed decoded string: '${e.message}'.";
+  }
+}
