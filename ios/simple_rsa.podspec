@@ -3,14 +3,14 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'simple_rsa'
-  s.version          = '0.0.1'
-  s.summary          = 'A new flutter plugin project.'
+  s.version          = '0.0.3'
+  s.summary          = 'A simple RSA plugin for flutter.'
   s.description      = <<-DESC
 A new flutter plugin project.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/adlanarifzr'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Adlan Arif Zakaria' => 'adlanarifzr@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'

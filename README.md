@@ -1,8 +1,8 @@
 # Simple RSA Encryption
 
-Flutter plugin to encrypt and decrypt (RSA/ECB/PCSK1) string with a public and a private key 
+Flutter plugin to encrypt, decrypt (RSA/ECB/PCSK1), verify and sign string with a public and a private key
 
-Support only ANDROID (for now)
+Support for ANDROID and iOS(thanks to adlanarifzr)
 
 ## Installation
 
@@ -11,22 +11,39 @@ To use the plugin, add `simple_rsa` as a
 
 ## Usage
 
-First, add private and public key
+First, initialize private and public key. Preferably in BASE64 format.
 
 ```
-final PUBLIC_KEY = "...";
-final PRIVATE_KEY = "...";
+final publicKey = '...';
+final privateKey = '...';
 ```
 
-After, you can encrypt text
+After that, you can encrypt or decyrpt text
 
-```final String textEncrypted = await encryptString(text, PUBLIC_KEY);```
+```
+let plainText = 'something';
+final encryptedText = await encryptString(plainText, utf8.decode(base64.decode(publicKey)));
+final decryptedText = await decryptString(encryptedText, utf8.decode(base64.decode(privateKey)));
 
-and decrypt
+// Test
+print(plainText == decryptedText ? 'true' : 'false');
+```
 
-```final String textDecrypted = await decryptString(encodedText, PRIVATE_KEY);```
+Or you might want to sign and verify text
+
+```
+let plainText = 'something';
+final signedText = await signString(plainText, utf8.decode(base64.decode(privateKey)));
+final verified = await verifyString(plainText, signedText, utf8.decode(base64.decode(publicKey)));
+
+// Test
+print(verified ? 'true' : 'false');
+```
 
 ## Example
 
 See the [example application](https://github.com/giandifra/simple_rsa/tree/master/example) source
 for a complete sample app using the Simple RSA encryption.
+
+### Contributions
+[Adlan Arif Zakaria (adlanarifzr)](https://github.com/adlanarifzr) iOS compatibility, sign and verify method.
