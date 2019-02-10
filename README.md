@@ -11,20 +11,34 @@ To use the plugin, add `simple_rsa` as a
 
 ## Usage
 
-First, add private and public key
+First, initialize private and public key. Preferably in BASE64 format.
 
 ```
-final PUBLIC_KEY = "...";
-final PRIVATE_KEY = "...";
+final publicKey = '...';
+final privateKey = '...';
 ```
 
-After, you can encrypt text
+After that, you can encrypt or decyrpt text
 
-```final String textEncrypted = await encryptString(text, PUBLIC_KEY);```
+```
+let plainText = 'something';
+final encryptedText = await encryptString(plainText, utf8.decode(base64.decode(publicKey)));
+final decryptedText = await decryptString(encryptedText, utf8.decode(base64.decode(privateKey)));
 
-and decrypt
+// Test
+print(plainText == decryptedText ? 'true' : 'false');
+```
 
-```final String textDecrypted = await decryptString(encodedText, PRIVATE_KEY);```
+Or you might want to sign and verify text
+
+```
+let plainText = 'something';
+final signedText = await signString(plainText, utf8.decode(base64.decode(privateKey)));
+final verified = await verifyString(plainText, signedText, utf8.decode(base64.decode(publicKey)));
+
+// Test
+print(verified ? 'true' : 'false');
+```
 
 ## Example
 

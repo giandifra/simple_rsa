@@ -35,9 +35,9 @@ Future<String> signString(String plainText, String privateKey) async {
   }
 }
 
-Future<String> verifyString(String plainText, String signature, String publicKey) async {
+Future<bool> verifyString(String plainText, String signature, String publicKey) async {
   try {
-    final String result = await _channel
+    final bool result = await _channel
         .invokeMethod('verify', {"plainText": plainText, "signature": signature, "publicKey": publicKey});
     return result;
   } on PlatformException catch (e) {
