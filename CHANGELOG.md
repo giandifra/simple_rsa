@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Edit encryptData for support input size greater then 512 bytes
+
 ## 0.0.3
 
 * Fixed iOS functions and optimize the code

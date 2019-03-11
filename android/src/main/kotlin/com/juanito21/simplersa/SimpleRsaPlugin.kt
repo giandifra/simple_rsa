@@ -122,7 +122,6 @@ class SimpleRsaPlugin() : MethodCallHandler {
 
     private fun encryptData(txt: String, publicKey: String): String {
         val encoded: String
-        val encrypted: ByteArray?
         try {
             val publicBytes = Base64.decode(publicKey, Base64.DEFAULT)
             val keySpec = X509EncodedKeySpec(publicBytes)
@@ -130,9 +129,30 @@ class SimpleRsaPlugin() : MethodCallHandler {
             val pubKey = keyFactory.generatePublic(keySpec)
             val cipher = Cipher.getInstance("RSA/ECB/PKCS1PADDING")
             cipher.init(Cipher.ENCRYPT_MODE, pubKey)
-            encrypted = cipher.doFinal(txt.toByteArray())
-            encoded = Base64.encodeToString(encrypted, Base64.DEFAULT)
+
+            val bytes = txt.toByteArray()
+            val blockSize = cipher.blockSize
+            val outBlockSize = cipher.getOutputSize(bytes.size)
+            val blocks: Int = Math.ceil(bytes.size / blockSize.toDouble()).toInt()
+            var output = ByteArray(blocks * outBlockSize)
+            var outputSize = 0
+
+            for (i in 0 until blocks) {
+                val offset = i * blockSize
+                val blockLength = Math.min(blockSize, bytes.size - offset)
+                val cryptoBlock = cipher.doFinal(bytes, offset, blockLength)
+                System.arraycopy(cryptoBlock, 0, output, outputSize, cryptoBlock.size)
+                outputSize += cryptoBlock.size
+            }
+
+            if (outputSize != output.size) {
+                val tmp = output.copyOfRange(0, outputSize)
+                output = tmp
+            }
+
+            encoded = Base64.encodeToString(output, Base64.DEFAULT)
             return encoded
+
         } catch (e: Exception) {
             throw Exception(e.toString())
         }
