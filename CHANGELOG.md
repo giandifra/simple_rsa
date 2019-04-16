@@ -1,3 +1,7 @@
+## 0.0.5
+
+* Migrate to AndroidX
+
 ## 0.0.4
 
 * Edit encryptData for support input size greater then 512 bytes
