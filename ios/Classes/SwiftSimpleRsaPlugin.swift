@@ -65,7 +65,7 @@ public class SwiftSimpleRsaPlugin: NSObject, FlutterPlugin {
         let clear = try! ClearMessage(string: plainText, using: .utf8)
 	    let publicKey = try! PublicKey(pemEncoded: publicKey)
 	    let signature = try! Signature(base64Encoded: signature)
-		let isSuccessful = try! clear.verify(with: publicKey, signature: signature, digestType: .sha1)
+		let isSuccessful = try! clear.verify(with: publicKey, signature: signature, digestType: .sha512)
 		return isSuccessful
     }
 }
