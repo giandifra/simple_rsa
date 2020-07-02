@@ -225,7 +225,7 @@ class SimpleRsaPlugin() : MethodCallHandler {
             val keyFactory = KeyFactory.getInstance("RSA")
             val pubKey = keyFactory.generatePublic(keySpec)
 
-            val publicSignature = Signature.getInstance("SHA1withRSA")
+             val publicSignature = Signature.getInstance("SHA512withRSA")
             publicSignature.initVerify(pubKey)
             publicSignature.update(plainText.toByteArray())
             val signatureBytes = Base64.decode(signature, Base64.DEFAULT)
