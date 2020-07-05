@@ -44,7 +44,7 @@ Future<bool> verifyString(String plainText, String signature, String publicKey,[
   try {
     publicKey = publicKey.replaceAll("-----BEGIN PUBLIC KEY-----", "").replaceAll("-----END PUBLIC KEY-----", "");
     final bool result = await _channel
-        .invokeMethod('verify', {"plainText": plainText, "signature": signature, "publicKey": publicKey});
+        .invokeMethod('verify', {"plainText": plainText, "signature": signature, "publicKey": publicKey,"sha":sha});
     return result;
   } on PlatformException catch (e) {
     throw "Failed decoded string: '${e.message}'.";
