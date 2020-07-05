@@ -40,7 +40,7 @@ Future<String> signString(String plainText, String privateKey) async {
   }
 }
 
-Future<bool> verifyString(String plainText, String signature, String publicKey) async {
+Future<bool> verifyString(String plainText, String signature, String publicKey,[String sha="SHA512withRSA"]) async {
   try {
     publicKey = publicKey.replaceAll("-----BEGIN PUBLIC KEY-----", "").replaceAll("-----END PUBLIC KEY-----", "");
     final bool result = await _channel
