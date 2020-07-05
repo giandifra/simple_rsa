@@ -40,11 +40,11 @@ Future<String> signString(String plainText, String privateKey) async {
   }
 }
 
-Future<bool> verifyString(String plainText, String signature, String publicKey,[String sha="SHA512withRSA"]) async {
+Future<bool> verifyString(String plainText, String signature, String publicKey) async {
   try {
     publicKey = publicKey.replaceAll("-----BEGIN PUBLIC KEY-----", "").replaceAll("-----END PUBLIC KEY-----", "");
     final bool result = await _channel
-        .invokeMethod('verify', {"plainText": plainText, "signature": signature, "publicKey": publicKey,"sha":sha});
+        .invokeMethod('verify', {"plainText": plainText, "signature": signature, "publicKey": publicKey});
     return result;
   } on PlatformException catch (e) {
     throw "Failed decoded string: '${e.message}'.";
