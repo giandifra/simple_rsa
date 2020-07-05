@@ -88,9 +88,10 @@ class SimpleRsaPlugin() : MethodCallHandler {
                 val text = call.argument<String>("plainText")
                 val sign = call.argument<String>("signature")
                 val publicKey = call.argument<String>("publicKey")
+                val sha=call.argument<String>("sha")
                 if (text != null && sign != null && publicKey != null) {
                     try {
-                        val output = verifyData(text, sign, publicKey)
+                        val output = verifyData(text, sign, publicKey,sha)
                         result.success(output)
                     } catch (e: java.lang.Exception) {
                         e.printStackTrace()
@@ -218,14 +219,14 @@ class SimpleRsaPlugin() : MethodCallHandler {
         }
     }
 
-    private fun verifyData(plainText: String, signature: String, publicKey: String): Boolean {
+    private fun verifyData(plainText: String, signature: String, publicKey: String,sha: String): Boolean {
         try {
             val publicBytes = Base64.decode(publicKey, Base64.DEFAULT)
             val keySpec = X509EncodedKeySpec(publicBytes)
             val keyFactory = KeyFactory.getInstance("RSA")
             val pubKey = keyFactory.generatePublic(keySpec)
 
-             val publicSignature = Signature.getInstance("SHA512withRSA")
+             val publicSignature = Signature.getInstance(sha)
             publicSignature.initVerify(pubKey)
             publicSignature.update(plainText.toByteArray())
             val signatureBytes = Base64.decode(signature, Base64.DEFAULT)
