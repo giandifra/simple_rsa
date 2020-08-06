@@ -26,15 +26,15 @@ public class SwiftSimpleRsaPlugin: NSObject, FlutterPlugin {
 			case "sign":
 				let plainText : String = argsMap["plainText"] as! String
     			let privateKey : String = argsMap["privateKey"] as! String
-                let sha : String = argsMap["sha"] as! String
+                        let sha : String = argsMap["sha"] as! String
     			let res = signData(plainText: plainText, privateKey: privateKey, sha:sha)
     			result(res)
 			case "verify":
 				let plainText : String = argsMap["plainText"] as! String
 		    	let signature : String = argsMap["signature"] as! String
 		    	let publicKey : String = argsMap["publicKey"] as! String
-                let sha : String = argsMap["sha"] as! String
-    			let res = verifyData(plainText: plainText, signature: signature, publicKey: publicKey, sha:sha)
+                        let sha : String = argsMap["sha"] as! String
+    			let res = verifyData(plainText: plainText, signature: signature, publicKey: publicKey, sha: sha)
 		    	result(res)
 			default:
 				result(FlutterMethodNotImplemented)
