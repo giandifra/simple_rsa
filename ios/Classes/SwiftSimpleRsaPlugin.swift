@@ -27,7 +27,7 @@ public class SwiftSimpleRsaPlugin: NSObject, FlutterPlugin {
 				let plainText : String = argsMap["plainText"] as! String
     			let privateKey : String = argsMap["privateKey"] as! String
                         let sha : String = argsMap["sha"] as! String
-    			let res = signData(plainText: plainText, privateKey: privateKey, sha:sha)
+    			let res = signData(plainText: plainText, privateKey: privateKey, sha: sha)
     			result(res)
 			case "verify":
 				let plainText : String = argsMap["plainText"] as! String
