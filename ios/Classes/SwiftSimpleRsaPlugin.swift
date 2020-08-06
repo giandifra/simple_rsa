@@ -26,15 +26,15 @@ public class SwiftSimpleRsaPlugin: NSObject, FlutterPlugin {
 			case "sign":
 				let plainText : String = argsMap["plainText"] as! String
     			let privateKey : String = argsMap["privateKey"] as! String
-    			let sha : String = argsMap["sha"] as! String
-    			let res = signData(plainText: plainText, privateKey: privateKey,sha:sha)
+                let sha : String = argsMap["sha"] as! String
+    			let res = signData(plainText: plainText, privateKey: privateKey, sha:sha)
     			result(res)
 			case "verify":
 				let plainText : String = argsMap["plainText"] as! String
 		    	let signature : String = argsMap["signature"] as! String
 		    	let publicKey : String = argsMap["publicKey"] as! String
-		    	let sha : String = argsMap["sha"] as! String
-    			let res = verifyData(plainText: plainText, signature: signature, publicKey: publicKey,sha:sha)
+                let sha : String = argsMap["sha"] as! String
+    			let res = verifyData(plainText: plainText, signature: signature, publicKey: publicKey, sha:sha)
 		    	result(res)
 			default:
 				result(FlutterMethodNotImplemented)
@@ -56,68 +56,18 @@ public class SwiftSimpleRsaPlugin: NSObject, FlutterPlugin {
         return plain
     }
 
-    private func signData(plainText: String, privateKey: String,sha:String) -> String {
+    private func signData(plainText: String, privateKey: String, sha: String) -> String {
     	let privateKey = try! PrivateKey(pemEncoded: privateKey)
     	let clear = try! ClearMessage(string: plainText, using: .utf8)
-    	if sha == "SHA512withRSA" {
-    	    let signature = try! clear.signed(with: privateKey, digestType: .sha512)
-            return signature.base64String
-           }
-        if sha == "SHA256withRSA"{
-            let signature = try! clear.signed(with: privateKey, digestType: .sha256)
-                    return signature.base64String
+		let signature = try! clear.signed(with: privateKey, digestType: .sha512)
+		return signature.base64String
+    }
 
-        }
-        if sha == "SHA1withRSA"{
-            let signature = try! clear.signed(with: privateKey, digestType: .sha1)
-                    return signature.base64String
-        }
-        if sha == "SHA224withRSA"{
-            let signature = try! clear.signed(with: privateKey, digestType: .sha224)
-                    return signature.base64String
-        }
-        if sha == "SHA384withRSA"{
-            let signature = try! clear.signed(with: privateKey, digestType: .sha384)
-                    return signature.base64String
-        }
-
-        // default return
-        let signature = try! clear.signed(with: privateKey, digestType: .sha1)
-        return signature.base64String
-
-		}
-
-    private func verifyData(plainText: String, signature: String, publicKey: String,sha :String) -> Bool {
+    private func verifyData(plainText: String, signature: String, publicKey: String , sha: String) -> Bool {
         let clear = try! ClearMessage(string: plainText, using: .utf8)
 	    let publicKey = try! PublicKey(pemEncoded: publicKey)
 	    let signature = try! Signature(base64Encoded: signature)
-		if sha == "SHA512withRSA" {
-    	    let isSuccessful = try! clear.verify(with: publicKey, signature: signature, digestType: .sha512)
-                    return isSuccessful
-           }
-        if sha == "SHA256withRSA"{
-            let isSuccessful = try! clear.verify(with: publicKey, signature: signature, digestType: .sha256)
-                    return isSuccessful
-
-        }
-        if sha == "SHA1withRSA"{
-           let isSuccessful = try! clear.verify(with: publicKey, signature: signature, digestType: .sha1)
-                    return isSuccessful
-        }
-        if sha == "SHA224withRSA"{
-            let isSuccessful = try! clear.verify(with: publicKey, signature: signature, digestType: .sha224)
-                    return isSuccessful
-        }
-        if sha == "SHA384withRSA"{
-            let isSuccessful = try! clear.verify(with: publicKey, signature: signature, digestType: .sha384)
-                    return isSuccessful
-        }
-
-        // default return
-        let isSuccessful = try! clear.verify(with: publicKey, signature: signature, digestType: .sha1)
-                    return isSuccessful
-
-		}
-	    
+		let isSuccessful = try! clear.verify(with: publicKey, signature: signature, digestType: .sha512)
+		return isSuccessful
     }
 }
