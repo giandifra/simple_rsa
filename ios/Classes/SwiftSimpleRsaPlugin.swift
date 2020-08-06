@@ -26,12 +26,14 @@ public class SwiftSimpleRsaPlugin: NSObject, FlutterPlugin {
 			case "sign":
 				let plainText : String = argsMap["plainText"] as! String
     			let privateKey : String = argsMap["privateKey"] as! String
+				let sha : String = argsMap["sha"] as! String
     			let res = signData(plainText: plainText, privateKey: privateKey)
     			result(res)
 			case "verify":
 				let plainText : String = argsMap["plainText"] as! String
 		    	let signature : String = argsMap["signature"] as! String
 		    	let publicKey : String = argsMap["publicKey"] as! String
+				let sha : String = argsMap["sha"] as! String
     			let res = verifyData(plainText: plainText, signature: signature, publicKey: publicKey)
 		    	result(res)
 			default:
@@ -57,7 +59,7 @@ public class SwiftSimpleRsaPlugin: NSObject, FlutterPlugin {
     private func signData(plainText: String, privateKey: String) -> String {
     	let privateKey = try! PrivateKey(pemEncoded: privateKey)
     	let clear = try! ClearMessage(string: plainText, using: .utf8)
-		let signature = try! clear.signed(with: privateKey, digestType: .sha1)
+		let signature = try! clear.signed(with: privateKey, digestType: .sha512)
 		return signature.base64String
     }
 
@@ -65,7 +67,7 @@ public class SwiftSimpleRsaPlugin: NSObject, FlutterPlugin {
         let clear = try! ClearMessage(string: plainText, using: .utf8)
 	    let publicKey = try! PublicKey(pemEncoded: publicKey)
 	    let signature = try! Signature(base64Encoded: signature)
-		let isSuccessful = try! clear.verify(with: publicKey, signature: signature, digestType: .sha1)
+		let isSuccessful = try! clear.verify(with: publicKey, signature: signature, digestType: .sha512)
 		return isSuccessful
     }
 }
